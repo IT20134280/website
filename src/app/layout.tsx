@@ -14,8 +14,8 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Set X-Frame-Options header to DENY
-  res.setHeader('X-Frame-Options', 'DENY');
+  // Add the HTTP Strict Transport Security (HSTS) header
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 
   // Handle your API logic here
 
