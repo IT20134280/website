@@ -33,8 +33,8 @@ const Garamond = EB_Garamond({ subsets: ["latin"] });
 const cspPolicy = {
   directives: {
     defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", 'trusted-scripts.com'], // Customize as needed
-    styleSrc: ["'self'", "'unsafe-inline'", 'trusted-styles.com'], // Customize as needed
+    scriptSrc: ["'self'", 'https://your-trusted-script-domain.com'],
+    styleSrc: ["'self'", 'https://your-trusted-style-domain.com'],
     frameAncestors: ["'self'", 'https://your-trusted-domain.com'], // Allow framing from the same origin and trusted domain
     // Add more directives for other resource types
   },
