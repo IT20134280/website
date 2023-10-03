@@ -1,10 +1,40 @@
 import Navigation from "@/components/navigation/Navigation";
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, NextApiRequest } from "next";
 import { EB_Garamond } from "next/font/google";
 import Footer from "@/components/footer/Footer";
+import { HelmetProvider } from 'react-helmet-async';
+import helmetCsp from 'helmet-csp';
+import Helmet from 'react-helmet';
+import { NextApiResponse } from 'next';
+
+export async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Set the appropriate CORS headers to allow requests only from trusted domains
+  res.setHeader('Access-Control-Allow-Origin', 'https://your-trusted-domain.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Set X-Frame-Options header to DENY
+  res.setHeader('X-Frame-Options', 'DENY');
+
+  // Handle your API logic here
+
+  // Example: Return a JSON response
+  res.status(200).json({ message: 'API response' });
+}
+
 
 const Garamond = EB_Garamond({ subsets: ["latin"] });
+const cspPolicy = {
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", "'unsafe-inline'", 'trusted-scripts.com'], // Customize as needed
+    styleSrc: ["'self'", "'unsafe-inline'", 'trusted-styles.com'], // Customize as needed
+    frameAncestors: ["'self'", 'https://your-trusted-domain.com'], // Allow framing from the same origin and trusted domain
+    // Add more directives for other resource types
+  },
+};
+
 
 export const metadata: Metadata = {
   title: "Tranquil Paradise: Whispers of Sporting Elegance",
@@ -16,8 +46,19 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Convert your CSP policy object into a string
+  const cspPolicyString = Object.entries(cspPolicy.directives)
+    .map(([directive, sources]) => `${directive} ${sources.join(' ')}`)
+    .join('; ');
+
   return (
     <html lang="en">
+      <head>
+        <Helmet>
+          <meta http-equiv="Content-Security-Policy" content={cspPolicyString} />
+          {/* Other meta tags or scripts as needed */}
+        </Helmet>
+      </head>
       <body>
         <Navigation />
         {children}
