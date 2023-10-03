@@ -13,9 +13,14 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Origin', 'https://your-trusted-domain.com');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
 
   // Add the HTTP Strict Transport Security (HSTS) header
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+
+  // Set the X-Content-Type-Options header
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+
 
   // Handle your API logic here
 
