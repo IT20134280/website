@@ -5,22 +5,20 @@ import { useRef } from "react";
 import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
+import { useOAuth } from 'react-oauth/google';
 
 function ContactForm() {
-  //   useEffect(() => {
-  //       AOS.init({
-  //         // Global settings:
-  //         disable: false,
-  //         startEvent: 'DOMContentLoaded',
-  //         initClassName: 'aos-init',
-  //         animatedClassName: 'aos-animate',
-  //         useClassNames: false,
-  //         disableMutationObserver: false,
-  //         debounceDelay: 50,
-  //         throttleDelay: 99,
 
-  //       });
-  //     }, []);
+  const oauthConfig = {
+    clientId: '889456123002-4u7cgnqlboml4gvc0e1vcpt5k0ic1rvj.apps.googleusercontent.com',
+    redirectUri: 'https://website.com',
+  };
+  const { signIn } = useOAuth(oauthConfig);
+
+  const handleOAuthClick = () => {
+    // Initiate the OAuth authentication flow when the button is clicked.
+    signIn();
+  };
 
   const form = useRef<HTMLFormElement>(null);
   interface Errors {
@@ -79,7 +77,7 @@ function ContactForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const sendEmail = (e: any) => {
+  const sendEmail = (e: any, accessToken: string) => {
     e.preventDefault();
 
     if (validateForm()) {
@@ -88,7 +86,8 @@ function ContactForm() {
           "service_73nig4t",
           "template_3hk190p",
           form.current ? form.current : "",
-          "vBZs8y73pkIHZq5_R"
+          "vBZs8y73pkIHZq5_R",
+          { access_token: accessToken } // Pass the access token here
         )
         .then(
           (result) => {
@@ -187,6 +186,14 @@ function ContactForm() {
           </form>
         </div>
       </div>
+
+      <button
+        onClick={handleOAuthClick}
+        className="text-center bg-blue flex mx-[auto] px-[35px] py-[10px] text-[25px] mt-[20px] mb-[20px] rounded-[15px] bg-gray-100 hover:bg-gray-200 border-[3px]"
+      >
+        Sign in with Google
+      </button>
+
     </div>
   );
 }
